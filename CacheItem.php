@@ -241,11 +241,15 @@ class CacheItem implements PhpCacheItem
     {
         if ($this->callable !== null) {
             // $func will be $adapter->fetchObjectFromCache();
-            $func                      = $this->callable;
-            $result                    = $func();
-            $this->hasValue            = $result[0];
-            $this->value               = $result[1];
-            $this->prevTags            = isset($result[2]) ? $result[2] : [];
+            $func = $this->callable;
+            $result = $func();
+            
+            if ($result) {
+                $this->hasValue = $result[0];
+                $this->value = $result[1];
+            }    
+            
+            $this->prevTags = isset($result[2]) ? $result[2] : [];
             $this->expirationTimestamp = null;
 
             if (isset($result[3]) && is_int($result[3])) {
